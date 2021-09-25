@@ -13,7 +13,14 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'webmock/rspec'
 RSpec.configure do |config|
+
+  config.before(:each) do
+    json_response = File.read('spec/fixtures/holidays.json')
+    stub_request(:get, "https://date.nager.at/swagger/index.html").
+      to_return(status: 200, body: json_response)
+  end
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
