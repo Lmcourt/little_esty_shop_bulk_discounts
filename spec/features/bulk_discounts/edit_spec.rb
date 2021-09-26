@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'merchant discounts index' do
+RSpec.describe 'merchant discounts show' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
 
@@ -41,48 +41,17 @@ RSpec.describe 'merchant discounts index' do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @bd1 = @merchant1.bulk_discounts.create!(bulk_name: "Discount A", percentage_discount: 10, quantity_threshold: 10)
+    @bd1 = @merchant1.bulk_discounts.create!(bulk_name: "Discount A", percentage_discount: 10, quantity_threshold: 30)
     @bd2 = @merchant1.bulk_discounts.create!(bulk_name: "Discount B", percentage_discount: 50, quantity_threshold: 100)
 
-    visit merchant_bulk_discounts_path(@merchant1)
+    visit edit_merchant_bulk_discount_path(@merchant1, @bd1)
   end
 
-  it 'shows all bulk discounts' do
-    expect(page).to have_content(@bd1.percentage_discount)
-    expect(page).to have_content(@bd1.quantity_threshold)
+  it 'has a form to edit a discount' do
 
-    click_on("Discount A")
+    fill_in 'Percentage discount', with: 20
+    click_on("Update")
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bd1))
-  end
-
-  it 'adds a discount to the index' do
-    click_on("Create a new discount")
-
-    fill_in("Bulk name", with: "Discount C")
-    fill_in("Percentage discount", with: 20)
-    fill_in("Quantity threshold", with: 10)
-    click_on("Submit")
-    expect(page).to have_content("Discount C")
-  end
-
-  it 'flashes an error' do
-    click_on("Create a new discount")
-
-    fill_in("Percentage discount", with: 20)
-    fill_in("Quantity threshold", with: 10)
-    click_on("Submit")
-
-    expect(page).to_not have_content("Discount D")
-    expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
-    expect(page).to have_content("Error. Please fill in all fields.")
-  end
-
-  it 'can delete a discount from their page' do
-    within("#discounts-#{@bd1.id}") do
-      expect(page).to have_content(@bd1.bulk_name)
-
-      click_on("Delete discount")
-    end
-    expect(page).to_not have_content(@bd1.bulk_name)
+    expect(page).to have_content(20)
   end
 end

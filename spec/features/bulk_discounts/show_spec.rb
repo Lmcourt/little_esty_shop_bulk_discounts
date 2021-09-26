@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'merchant discounts index' do
+RSpec.describe 'merchant discounts show' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
 
@@ -44,45 +44,30 @@ RSpec.describe 'merchant discounts index' do
     @bd1 = @merchant1.bulk_discounts.create!(bulk_name: "Discount A", percentage_discount: 10, quantity_threshold: 10)
     @bd2 = @merchant1.bulk_discounts.create!(bulk_name: "Discount B", percentage_discount: 50, quantity_threshold: 100)
 
-    visit merchant_bulk_discounts_path(@merchant1)
+    visit merchant_bulk_discount_path(@merchant1, @bd1)
   end
 
-  it 'shows all bulk discounts' do
+  it 'shows discount info' do
+    expect(page).to have_content(@bd1.bulk_name)
     expect(page).to have_content(@bd1.percentage_discount)
     expect(page).to have_content(@bd1.quantity_threshold)
-
-    click_on("Discount A")
-    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bd1))
   end
 
-  it 'adds a discount to the index' do
-    click_on("Create a new discount")
+  # Merchant Bulk Discount Edit
 
-    fill_in("Bulk name", with: "Discount C")
-    fill_in("Percentage discount", with: 20)
-    fill_in("Quantity threshold", with: 10)
-    click_on("Submit")
-    expect(page).to have_content("Discount C")
-  end
+# As a merchant
+# When I visit my bulk discount show page
+# Then I see a link to edit the bulk discount
+# When I click this link
+# Then I am taken to a new page with a form to edit the discount
+# And I see that the discounts current attributes are pre-poluated in the form
+# When I change any/all of the information and click submit
+# Then I am redirected to the bulk discount's show page
+# And I see that the discount's attributes have been updated
 
-  it 'flashes an error' do
-    click_on("Create a new discount")
 
-    fill_in("Percentage discount", with: 20)
-    fill_in("Quantity threshold", with: 10)
-    click_on("Submit")
-
-    expect(page).to_not have_content("Discount D")
-    expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
-    expect(page).to have_content("Error. Please fill in all fields.")
-  end
-
-  it 'can delete a discount from their page' do
-    within("#discounts-#{@bd1.id}") do
-      expect(page).to have_content(@bd1.bulk_name)
-
-      click_on("Delete discount")
-    end
-    expect(page).to_not have_content(@bd1.bulk_name)
+  it 'edits the discount' do
+    click_on("Edit discount")
+    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @bd1))
   end
 end
