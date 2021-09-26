@@ -41,33 +41,17 @@ RSpec.describe 'merchant discounts show' do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @bd1 = @merchant1.bulk_discounts.create!(bulk_name: "Discount A", percentage_discount: 10, quantity_threshold: 10)
+    @bd1 = @merchant1.bulk_discounts.create!(bulk_name: "Discount A", percentage_discount: 10, quantity_threshold: 30)
     @bd2 = @merchant1.bulk_discounts.create!(bulk_name: "Discount B", percentage_discount: 50, quantity_threshold: 100)
 
-    visit merchant_bulk_discount_path(@merchant1, @bd1)
+    visit edit_merchant_bulk_discount_path(@merchant1, @bd1)
   end
 
-  it 'shows discount info' do
-    expect(page).to have_content(@bd1.bulk_name)
-    expect(page).to have_content(@bd1.percentage_discount)
-    expect(page).to have_content(@bd1.quantity_threshold)
-  end
+  it 'has a form to edit a discount' do
 
-  # Merchant Bulk Discount Edit
-
-# As a merchant
-# When I visit my bulk discount show page
-# Then I see a link to edit the bulk discount
-# When I click this link
-# Then I am taken to a new page with a form to edit the discount
-# And I see that the discounts current attributes are pre-poluated in the form
-# When I change any/all of the information and click submit
-# Then I am redirected to the bulk discount's show page
-# And I see that the discount's attributes have been updated
-
-
-  it 'edits the discount' do
-    click_on("Edit discount")
-    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @bd1))
+    fill_in 'Percentage discount', with: 20
+    click_on("Update")
+    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bd1))
+    expect(page).to have_content(20)
   end
 end
