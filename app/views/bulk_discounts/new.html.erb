@@ -1,0 +1,11 @@
+<h1>New Discount</h1>
+
+<%= form_with model: [@merchant, @bulk_discount], local: true do |f| %>
+  <%= f.label :bulk_name %>
+  <%= f.text_field :bulk_name %><br><br>
+  <%= f.label :percentage_discount %>
+  <%= f.number_field :percentage_discount %><br><br>
+  <%= f.label :quantity_threshold %>
+  <%= f.number_field :quantity_threshold %><br><br>
+  <%= f.submit "Submit" %>
+<% end %>

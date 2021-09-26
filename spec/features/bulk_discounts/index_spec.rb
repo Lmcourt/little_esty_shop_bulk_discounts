@@ -54,4 +54,36 @@ RSpec.describe 'merchant discounts index' do
     click_on("Discount A")
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bd1))
   end
+
+  it 'adds a discount to the index' do
+    click_on("Create a new discount")
+
+    fill_in("Bulk name", with: "Discount C")
+    fill_in("Percentage discount", with: 20)
+    fill_in("Quantity threshold", with: 10)
+    click_on("Submit")
+    expect(page).to have_content("Discount C")
+  end
+
+  # it 'flashes an error' do
+  #   click_on("Create a new discount")
+  #
+  #   fill_in("Percentage discount", with: 20)
+  #   fill_in("Quantity threshold", with: 10)
+  #   click_on("Submit")
+  #
+  #   expect(page).to_not have_content("Discount D")
+  #   expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
+  #   expect(page).to have_content("Error. Please fill in all fields.")
+  # end
+#   As a merchant
+# When I visit my bulk discounts index
+# Then next to each bulk discount I see a link to delete it
+# When I click this link
+# Then I am redirected back to the bulk discounts index page
+# And I no longer see the discount listed
+  it 'can delete a discount from their page' do
+    click_on("Delete discount")
+
+  end
 end
