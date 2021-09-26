@@ -85,6 +85,4 @@ RSpec.describe 'merchant discounts index' do
     end
     expect(page).to_not have_content(@bd1.bulk_name)
   end
-
-
 end
