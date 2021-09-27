@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'merchant discounts show' do
+RSpec.describe 'merchant discounts edit' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
 
