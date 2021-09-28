@@ -41,13 +41,14 @@ RSpec.describe 'merchant discounts index' do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @bd1 = @merchant1.bulk_discounts.create!(bulk_name: "Discount A", percentage_discount: 10, quantity_threshold: 10)
-    @bd2 = @merchant1.bulk_discounts.create!(bulk_name: "Discount B", percentage_discount: 50, quantity_threshold: 100)
+    @bd1 = @merchant1.bulk_discounts.create!(bulk_name: "Discount A", percentage_discount: 20, quantity_threshold: 10)
+    @bd2 = @merchant1.bulk_discounts.create!(bulk_name: "Discount B", percentage_discount: 10, quantity_threshold: 5)
 
     visit merchant_bulk_discounts_path(@merchant1)
   end
 
   it 'shows all bulk discounts' do
+    save_and_open_page
     expect(page).to have_content(@bd1.percentage_discount)
     expect(page).to have_content(@bd1.quantity_threshold)
 
@@ -84,5 +85,12 @@ RSpec.describe 'merchant discounts index' do
       click_on("Delete discount")
     end
     expect(page).to_not have_content(@bd1.bulk_name)
+  end
+
+  it 'has next three holidays' do
+    expect(page.status_code).to eq 200
+    expect(page).to have_content("Veterans Day")
+    expect(page).to have_content("Columbus Day")
+    expect(page).to have_content("Thanksgiving")
   end
 end

@@ -2,6 +2,7 @@ class BulkDiscountsController < ApplicationController
   before_action :current_merchant
 
   def index
+    @holidays = BulkDiscountFacade.holidays
   end
 
   def show
