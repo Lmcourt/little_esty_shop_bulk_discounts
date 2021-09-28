@@ -18,7 +18,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     json_response = File.read('spec/fixtures/holidays.json')
-    stub_request(:get, "https://date.nager.at/swagger/index.html").
+    stub_request(:get, "https://date.nager.at/api/v2/NextPublicHolidays/US").
       to_return(status: 200, body: json_response)
   end
   # rspec-expectations config goes here. You can use an alternate
