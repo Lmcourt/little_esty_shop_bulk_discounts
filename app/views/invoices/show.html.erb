@@ -24,6 +24,7 @@
   <p>Discounted Revenue: <%= @invoice.merchant_discounted_revenue(@merchant) %></p>
 
 
+
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>
   <br>
@@ -51,9 +52,7 @@
                                             <%= f.select :status, Invoice.statuses.keys, selected: "#{@invoice.status}" %>
                                             <%= f.submit 'Update Invoice' %>
                                           <% end %></td><br/>
-            <% if i.highest_discount.nil? %>
-              <p><b>N/A</b></p>
-            <% else %>
+            <% if i.highest_discount != nil %>
             <td style="text-align:center"><%= link_to "#{i.highest_discount.bulk_name}", merchant_bulk_discount_path(@merchant, i.highest_discount), method: :get  %></td>
           <% end %>
           </tr>
@@ -62,4 +61,4 @@
     </tbody>
   </table>
 
-</body>
+  </body>
