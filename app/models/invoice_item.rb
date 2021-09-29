@@ -28,7 +28,11 @@ class InvoiceItem < ApplicationRecord
                   .first
   end
 
-  def discounted_price
-    revenue * (1 - highest_discount.percentage_discount.fdiv(100))
+  def discounted_revenue
+    if highest_discount.nil?
+      revenue
+    else
+      revenue * (1 - highest_discount.percentage_discount.fdiv(100))
+    end
   end
 end

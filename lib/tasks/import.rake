@@ -30,6 +30,9 @@ task :import, [:invoices] => :environment do
     elsif row.to_hash['status'] == 'completed'
       status = 2
     end
+    if status.blank?
+      require "pry"; binding.pry
+    end
     Invoice.create!({ id:          row[0],
                       customer_id: row[1],
                       status:      status,

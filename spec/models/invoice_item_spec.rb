@@ -65,8 +65,8 @@ RSpec.describe InvoiceItem, type: :model do
       expect(@ii_1.highest_discount).to eq(@bd1)
     end
 
-    it 'has a discounted price' do
-      expect(@ii_1.discounted_price).to eq(80)
+    it 'has a discounted revenue' do
+      expect(@ii_1.discounted_revenue).to eq(80)
     end
   end
 end

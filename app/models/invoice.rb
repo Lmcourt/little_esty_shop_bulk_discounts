@@ -8,7 +8,7 @@ class Invoice < ApplicationRecord
   has_many :items, through: :invoice_items
   has_many :merchants, through: :items
 
-  enum status: [:cancelled, 'in progress', :complete]
+  enum status: [:cancelled, 'in progress', :completed]
 
   def total_revenue
     invoice_items.sum("unit_price * quantity")
@@ -20,29 +20,20 @@ class Invoice < ApplicationRecord
                  .sum('invoice_items.unit_price * quantity')
   end
 
-  def discounted_revenue
+  def total_discounted_revenue
     invoice_items.sum do |ii|
-      if ii.highest_discount
-        ii.discounted_price
-      else
-        ii.revenue
-      end
+      ii.discounted_revenue
     end
   end
 
-  # def discounted_revenue(merchant_id)
-  #   invoice_items.sum do |ii|
-  #     if ii.highest_discount && ii.merchant.id == merchant_id
-  #       ii.discounted_price
-  #     else
-  #       ii.revenue
-  #     end
-  #   end
-  # end
-
   def merchant_discounted_revenue(merchant)
-    invoice_items.joins(:items)
-                .where('items.merchant_id = ?', merchant)
-                .sum(merchant_total_revenue(merchant) - invoice_items.discounted_price)
+    merchant_items(merchant).sum do |ii|
+      ii.discounted_revenue
+    end
+  end
+
+  def merchant_items(merchant)
+    invoice_items.joins(:item)
+                  .where('items.merchant_id = ?', merchant.id)
   end
 end
